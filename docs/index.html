@@ -6,7 +6,7 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Широ — помодоро-таймер, задачник и прикольчики</title>
+<title>Широ — помодоро-таймер, задачник и прикольчики</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -248,6 +248,18 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
 .motion-control { border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--ink); cursor: pointer; padding: 7px 0; font: inherit; font-size: .9rem; }
 @media(max-width:860px) { .feature-panel { min-height: 0; } .feature-panel .wrap { gap: 28px; } .feature-panel .shot { max-width: 460px; width: 100%; margin-inline: auto !important; } }
 @media(max-width:560px) { .feature-tabs { display:grid; grid-template-columns:1fr 1fr; } .feature-tabs button { padding:10px 8px; font-size:.9rem; } .feature-panel .list li { grid-template-columns: minmax(0,1fr); gap:4px; } }
+/* Readable wrapping at every screen width. */
+.hero-copy { min-width: 0; container-type: inline-size; }
+.hero h1 { font-size: clamp(1.25rem, 8.4cqi, 3rem); line-height: 1.12; text-wrap: initial; }
+.hero h1 > span { display: block; white-space: nowrap; }
+p, li, figcaption, blockquote, .list li > span { text-wrap: pretty; }
+.copy p, .list li > span, .warn, .get-note, .cols li, footer { hyphens: auto; hyphenate-limit-chars: 7 3 3; }
+h1, h2, h3, button, .dl, .wordmark, kbd, code { hyphens: none; }
+h2, h3 { text-wrap: balance; }
+.copy, .copy > *, .os > *, .list li > *, .cols > * { min-width: 0; }
+.get-note a, footer a { overflow-wrap: anywhere; }
+.dl b { white-space: nowrap; }
+pre.md { white-space: pre-wrap; overflow-wrap: anywhere; hyphens: none; }
 </style>
 
 <header class="top">
@@ -256,7 +268,7 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
     <nav class="nav" aria-label="Разделы">
       <a href="https://github.com/lilo-shire/shiro-public" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <a href="#inside">что внутри</a>
-      <a href="#setup">скачать и установить</a>
+      <a href="#setup">скачать и установить</a>
     </nav>
   </div>
 </header>
@@ -264,19 +276,19 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <div>
-        <h1>да, это еще один помодоро-таймер</h1>
+      <div class="hero-copy">
+        <h1><span>да, это</span> <span>еще один</span> <span>помодоро‑таймер</span></h1>
         <p class="lead">+ задачник + прикольчики</p>
-        <p class="facts">macOS 12 и новее · Windows 10 и 11</p>
-        <details class="feedback-drop"><summary>хочешь накинуть на вентилятор?</summary><p>пиши сюда — <a href="https://t.me/it_sounds_silly" target="_blank" rel="noopener noreferrer">@it_sounds_silly ↗</a></p></details>
+        <p class="facts">macOS 12 и новее · Windows 10 и 11</p>
+        <details class="feedback-drop"><summary>хочешь накинуть на вентилятор?</summary><p>пиши сюда — <a href="https://t.me/it_sounds_silly" target="_blank" rel="noopener noreferrer">@it_sounds_silly ↗</a></p></details>
 
         <div class="get" id="get">
-          <a class="dl" data-dl="mac-arm" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-AppleSilicon.zip" download><b>Mac · M1–M4</b><span>Apple Silicon · 4,4 МБ</span></a>
-          <a class="dl" data-dl="mac-intel" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-Intel.zip" download><b>Mac · Intel</b><span>4,4 МБ</span></a>
-          <a class="dl" data-dl="win" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-Windows-x64.zip" download><b>Windows</b><span>10 и 11, 64-бит · 49,6 МБ</span></a>
+          <a class="dl" data-dl="mac-arm" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-AppleSilicon.zip" download><b>Mac · M1–M4</b><span>Apple Silicon · 4,4 МБ</span></a>
+          <a class="dl" data-dl="mac-intel" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-Intel.zip" download><b>Mac · Intel</b><span>4,4 МБ</span></a>
+          <a class="dl" data-dl="win" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-Windows-x64.zip" download><b>Windows</b><span>10 и 11, 64-бит · 49,6 МБ</span></a>
         </div>
         <p class="dl-status" id="dl-status" aria-live="polite"></p>
-        <p class="get-note">Какой у тебя Mac, видно в меню Apple → «Об этом Mac», строка «Чип» или «Процессор». Вся инструкция одним файлом: <a data-dl="guide" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-guide.md" download>Shiro-guide.md</a>.</p>
+        <p class="get-note">Какой у тебя Mac, видно в меню Apple → «Об этом Mac», строка «Чип» или «Процессор». Вся инструкция одним файлом: <a data-dl="guide" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-guide.md" download>Shiro-guide.md</a>.</p>
 
         <div class="ruler" aria-hidden="true">
           <div class="ruler-ticks" id="ruler"><span class="past"></span><span class="now"></span></div>
@@ -293,28 +305,28 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   </section>
 
   <section class="inside" id="inside" aria-labelledby="inside-title">
-    <div class="wrap inside-intro"><h2 id="inside-title">Что внутри</h2><p>Таймер, списки и компания на рабочем столе. Посмотри, как всё устроено.</p></div>
+    <div class="wrap inside-intro"><h2 id="inside-title">Что внутри</h2><p>Таймер, списки и компания на рабочем столе. Посмотри, как всё устроено.</p></div>
     <div class="tabs-wrap"><div class="wrap"><div class="feature-tabs" role="tablist" aria-label="Что внутри Широ"><button type="button" role="tab" id="tab-timer" aria-controls="timer" aria-selected="true" tabindex="0">Таймер</button>
 <button type="button" role="tab" id="tab-tasks" aria-controls="tasks" aria-selected="false" tabindex="-1">Задачи</button>
-<button type="button" role="tab" id="tab-file" aria-controls="file" aria-selected="false" tabindex="-1">Задачи из файла</button>
+<button type="button" role="tab" id="tab-file" aria-controls="file" aria-selected="false" tabindex="-1">Задачи из файла</button>
 <button type="button" role="tab" id="tab-moods" aria-controls="moods" aria-selected="false" tabindex="-1">Реакции</button>
 <button type="button" role="tab" id="tab-schemes" aria-controls="schemes" aria-selected="false" tabindex="-1">Оформление</button>
 <button type="button" role="tab" id="tab-settings" aria-controls="settings" aria-selected="false" tabindex="-1">Настройки</button></div></div></div>
   <section class="band b1 feature-panel" id="timer" role="tabpanel" aria-labelledby="tab-timer" tabindex="0">
     <div class="wrap">
       <div class="copy">
-        <div class="head"><h2>Время по твоим правилам</h2></div>
-        <p>Выбери, сколько работать и сколько отдыхать, и нажми ▶. Оставшееся время видно и в окне, и на маленькой плашке под Широ — окно с задачами можно закрыть.</p>
+        <div class="head"><h2>Время по твоим правилам</h2></div>
+        <p>Выбери, сколько работать и сколько отдыхать, и нажми ▶. Оставшееся время видно и в окне, и на маленькой плашке под Широ — окно с задачами можно закрыть.</p>
         <ul class="list">
-          <li><b>Работа и отдых</b><span>Длину обоих интервалов можно менять в настройках.</span></li>
-          <li><b>Пауза</b><span>Можно отвлечься и продолжить с того же места.</span></li>
-          <li><b>Общий или личный</b><span>Один таймер на всё или своё оставшееся время у каждой задачи.</span></li>
+          <li><b>Работа и отдых</b><span>Длину обоих интервалов можно менять в настройках.</span></li>
+          <li><b>Пауза</b><span>Можно отвлечься и продолжить с того же места.</span></li>
+          <li><b>Общий или личный</b><span>Один таймер на всё или своё оставшееся время у каждой задачи.</span></li>
           <li><b>Когда время вышло</b><span>Широ подаст сигнал. Следующий интервал запускаешь ты.</span></li>
         </ul>
       </div>
       <figure class="shot" style="margin:0">
         <img class="panel-full" src="img/panel-task.png" width="403" height="532" alt="Таймер и своё время у каждой задачи в красно-чёрной схеме">
-        <figcaption>Таймер в окне. Время задачи — рядом с её названием.</figcaption>
+        <figcaption>Таймер в окне. Время задачи — рядом с её названием.</figcaption>
       </figure>
     </div>
   </section>
@@ -322,18 +334,18 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   <section class="band b2 flip feature-panel" id="tasks" role="tabpanel" aria-labelledby="tab-tasks" tabindex="0" hidden>
     <div class="wrap">
       <div class="copy">
-        <div class="head"><h2>Разложить всё по полочкам</h2></div>
-        <p>Собери свои разделы: работа, личное, проекты, список на потом. Названия и порядок — какие тебе удобно.</p>
+        <div class="head"><h2>Разложить всё по полочкам</h2></div>
+        <p>Собери свои разделы: работа, личное, проекты, список на потом. Названия и порядок — какие тебе удобно.</p>
         <ul class="list">
-          <li><b>Быстро записать</b><span>Добавляй задачи подряд, редактируй двойным кликом и прикрепляй ссылки.</span></li>
-          <li><b>Переставить</b><span>Двигай задачи и целые разделы мышкой. Длинные названия переносятся на новую строку.</span></li>
-          <li><b>Взять в работу</b><span>Выбери текущую задачу — её название появится под Широ.</span></li>
-          <li><b>Закрыть и вернуть</b><span>Готовое уходит в «Завершённые». Оттуда можно вернуть задачу или удалить её навсегда.</span></li>
+          <li><b>Быстро записать</b><span>Добавляй задачи подряд, редактируй двойным кликом и прикрепляй ссылки.</span></li>
+          <li><b>Переставить</b><span>Двигай задачи и целые разделы мышкой. Длинные названия переносятся на новую строку.</span></li>
+          <li><b>Взять в работу</b><span>Выбери текущую задачу — её название появится под Широ.</span></li>
+          <li><b>Закрыть и вернуть</b><span>Готовое уходит в «Завершённые». Оттуда можно вернуть задачу или удалить её навсегда.</span></li>
         </ul>
       </div>
       <figure class="shot" style="margin:0">
         <div class="crop" style="aspect-ratio: 806 / 540"><img src="img/panel-adding.png" alt="Раздел «На сегодня» с открытой строкой «Новая задача» и длинной задачей, перенесённой на две строки" style="top:calc(-232 / 540 * 100%)"></div>
-        <figcaption>Новая задача и длинное название в две строки, схема 42</figcaption>
+        <figcaption>Новая задача и длинное название в две строки, схема 42</figcaption>
         <div class="crop" style="aspect-ratio: 806 / 222"><img src="img/theme-pastel.png" alt="Блок «Завершённые»: зачёркнутые задачи с подписью раздела и ссылкой" style="top:calc(-842 / 222 * 100%)"></div>
         <figcaption>Блок «Завершённые»</figcaption>
       </figure>
@@ -343,8 +355,8 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   <section class="band b3 feature-panel" id="file" role="tabpanel" aria-labelledby="tab-file" tabindex="0" hidden>
     <div class="wrap">
       <div class="copy">
-        <div class="head"><h2>Задачи из файла</h2><span class="count">.md, например из Obsidian</span></div>
-        <p>Уже ведёшь список в Obsidian? Подключи свой .md-файл в настройках, и его задачи появятся в Широ. Можно работать прямо с ними или перенести нужное в свои разделы.</p>
+        <div class="head"><h2>Задачи из файла</h2><span class="count">.md, например из Obsidian</span></div>
+        <p>Уже ведёшь список в Obsidian? Подключи свой .md-файл в настройках, и его задачи появятся в Широ. Можно работать прямо с ними или перенести нужное в свои разделы.</p>
 <details class="format-help"><summary>Как должен выглядеть файл</summary>
 <pre class="md"><span class="c"># Понедельник              ← заголовок пропускается</span>
 ## Утро                      <span class="c">← группа в блоке</span>
@@ -356,16 +368,16 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
 
 ## Итог дня                  <span class="c">← не показывается</span></pre>
 </details>
-        <p>Из Широ можно добавить задачу в файл или отметить готовую:</p>
+        <p>Из Широ можно добавить задачу в файл или отметить готовую:</p>
         <ul class="list">
-          <li><b>+ в шапке блока</b><span>дописывает строку <code>- [ ] текст</code> в «## Всплыло за день», а если такого раздела нет, в первый.</span></li>
-          <li><b>Кружок</b><span>меняет <code>[ ]</code> на <code>[x]</code> и обратно в строке этой задачи.</span></li>
+          <li><b>+ в шапке блока</b><span>дописывает строку <code>- [ ] текст</code> в «## Всплыло за день», а если такого раздела нет, в первый.</span></li>
+          <li><b>Кружок</b><span>меняет <code>[ ]</code> на <code>[x]</code> и обратно в строке этой задачи.</span></li>
         </ul>
-        <p class="aside">Задачу из файла можно сделать текущей, скопировать в свои разделы, переставить внутри блока или передвинуть весь блок. Этот порядок хранится только в Широ. Любые изменения в файле подхватываются автоматически через пару секунд — в том числе если заменить файл новым по тому же пути. Ссылки вида <code>[[Заметка]]</code> открываются прямо в Obsidian.</p>
+        <p class="aside">Задачу из файла можно сделать текущей, скопировать в свои разделы, переставить внутри блока или передвинуть весь блок. Этот порядок хранится только в Широ. Любые изменения в файле подхватываются автоматически через пару секунд — в том числе если заменить файл новым по тому же пути. Ссылки вида <code>[[Заметка]]</code> открываются прямо в Obsidian.</p>
       </div>
       <figure class="shot" style="margin:0">
         <div class="crop" style="aspect-ratio: 806 / 476"><img src="img/panel-file.png" alt="Блок today с группами «Утро» и «Всплыло за день»; текущая задача «Набросать план» выделена стрелкой" style="top:calc(-284 / 476 * 100%)"></div>
-        <figcaption>Блок из файла today.md, текущая задача отмечена стрелкой</figcaption>
+        <figcaption>Блок из файла today.md, текущая задача отмечена стрелкой</figcaption>
       </figure>
     </div>
   </section>
@@ -374,7 +386,7 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
     <div class="wrap">
       <div class="copy">
         <div class="head"><h2>Как реагирует Широ</h2><span class="count">5 состояний</span></div>
-        <p>Как в нулевых, Широ тусуется на твоём рабочем столе поверх всех окон — если прям сильно мешает, сворачивай ПКМ, но тогда велик риск пропустить все глупи анимации.</p>
+        <p>Как в нулевых, Широ тусуется на твоём рабочем столе поверх всех окон — если прям сильно мешает, сворачивай ПКМ, но тогда велик риск пропустить все глупи анимации.</p>
         <div class="moods" role="group" aria-label="Состояние Широ">
           <button type="button" data-mood="0" aria-pressed="true">пауза</button>
           <button type="button" data-mood="7" aria-pressed="false">идёт фокус</button>
@@ -382,9 +394,9 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
           <button type="button" data-mood="5" aria-pressed="false">начался перерыв</button>
           <button type="button" data-mood="3" aria-pressed="false">задача выполнена</button>
         </div>
-        <p class="mood-text" id="mood-text" aria-live="polite">На паузе и в перерыве Широ спокойно стоит.</p>
-        <p class="aside">Под ним — время и текущая задача. Длинное название один раз пробегает строкой, когда ты открываешь окно или запускаешь таймер.</p>
-        <blockquote class="creator-note">Никто не остановит вас от создания своего маскота и кастомного набора реакций. Я даже буду рада — принесите и мне ♡</blockquote>
+        <p class="mood-text" id="mood-text" aria-live="polite">На паузе и в перерыве Широ спокойно стоит.</p>
+        <p class="aside">Под ним — время и текущая задача. Длинное название один раз пробегает строкой, когда ты открываешь окно или запускаешь таймер.</p>
+        <blockquote class="creator-note">Никто не остановит вас от создания своего маскота и кастомного набора реакций. Я даже буду рада — принесите и мне ♡</blockquote>
       </div>
       <div class="shot stage">
         <div class="pet-preview">
@@ -400,7 +412,7 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
     <div class="wrap">
       <div class="copy">
         <div class="head"><h2>Оформление</h2><span class="count">8 схем</span></div>
-        <p>У каждой схемы свой номер. Нажми на кружок, чтобы посмотреть окно в этой схеме.</p>
+        <p>У каждой схемы свой номер. Нажми на кружок, чтобы посмотреть окно в этой схеме.</p>
         <div class="themes" role="group" aria-label="Цветовые схемы">
           <button type="button" data-theme-id="pastel" aria-pressed="true"><span class="sw" style="background:conic-gradient(#F5F3EF 0 25%, #F3E3AA 0 50%, #F3CDBB 0 75%, #EEC8D7 0)"></span><span class="num">33</span></button>
           <button type="button" data-theme-id="nature" aria-pressed="false"><span class="sw" style="background:conic-gradient(#ECE6D8 0 25%, #DCCB96 0 50%, #CFA27A 0 75%, #B9C087 0)"></span><span class="num">42</span></button>
@@ -411,8 +423,8 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
           <button type="button" data-theme-id="night" aria-pressed="false"><span class="sw" style="background:conic-gradient(#131315 0 25%, #1C1C1F 0 50%, #2A2A2E 0 75%, #313136 0)"></span><span class="num">90</span></button>
           <button type="button" data-theme-id="bsod" aria-pressed="false"><span class="sw" style="background:conic-gradient(#0A33B5 0 25%, #1244D1 0 50%, #184EDC 0 75%, #1F58E5 0)"></span><span class="num">01</span></button>
         </div>
-        <p class="theme-name" id="theme-name" aria-live="polite"><b>33</b> пастель, схема по умолчанию</p>
-        <p class="aside">Схема меняет и окно, и плашку под Широ. Язык интерфейса переключается между русским и английским, названия задач остаются как есть.</p>
+        <p class="theme-name" id="theme-name" aria-live="polite"><b>33</b> пастель, схема по умолчанию</p>
+        <p class="aside">Схема меняет и окно, и плашку под Широ. Язык интерфейса переключается между русским и английским, названия задач остаются как есть.</p>
       </div>
       <div class="shot">
         <img class="panel-full" id="theme-img" src="img/theme-pastel.png" width="403" height="532" alt="Окно Широ в схеме 33">
@@ -423,17 +435,17 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   <section class="band b5 flip feature-panel" id="settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
     <div class="wrap">
       <div class="copy">
-        <div class="head"><h2>Настройки</h2><span class="count">значок с ползунками в углу окна</span></div>
+        <div class="head"><h2>Настройки</h2><span class="count">значок с ползунками в углу окна</span></div>
         <ul class="list">
           <li><b>Оформление</b><span>восемь схем: 33, 42, 71, 67, 00, 10, 90, 01.</span></li>
-          <li><b>Таймер</b><span>общий для всех задач или свой у каждой.</span></li>
-          <li><b>Фокус и перерыв</b><span>длина в минутах: фокус до 180, перерыв до 60.</span></li>
-          <li><b>Звук</b><span>наборы «Стекло», «Дерево», «Воздух» и громкость. <kbd>▶</kbd> даёт послушать.</span></li>
-          <li><b>Звук клавиатуры</b><span>тихий стук клавиш, пока идёт фокус, со своей громкостью. На паузе и в перерыве плавно затихает.</span></li>
-          <li><b>Уведомления</b><span>системное уведомление в конце интервала. Клик по нему открывает окно.</span></li>
-          <li><b>Размер окна</b><span>S, M или L.</span></li>
-          <li><b>Язык</b><span>Рус или Eng.</span></li>
-          <li><b>Файл задач</b><span>подключить или отключить .md-файл.</span></li>
+          <li><b>Таймер</b><span>общий для всех задач или свой у каждой.</span></li>
+          <li><b>Фокус и перерыв</b><span>длина в минутах: фокус до 180, перерыв до 60.</span></li>
+          <li><b>Звук</b><span>наборы «Стекло», «Дерево», «Воздух» и громкость. <kbd>▶</kbd> даёт послушать.</span></li>
+          <li><b>Звук клавиатуры</b><span>тихий стук клавиш, пока идёт фокус, со своей громкостью. На паузе и в перерыве плавно затихает.</span></li>
+          <li><b>Уведомления</b><span>системное уведомление в конце интервала. Клик по нему открывает окно.</span></li>
+          <li><b>Размер окна</b><span>S, M или L.</span></li>
+          <li><b>Язык</b><span>Рус или Eng.</span></li>
+          <li><b>Файл задач</b><span>подключить или отключить .md-файл.</span></li>
         </ul>
       </div>
       <div class="shot">
@@ -448,29 +460,29 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   <section class="band b6" id="setup">
     <div class="wrap">
       <div class="os">
-        <div class="head"><h2>Установка на Mac</h2><span class="count">macOS 12+</span></div>
+        <div class="head"><h2>Установка на Mac</h2><span class="count">macOS 12+</span></div>
         <ol class="steps">
-          <li><span>Скачай архив для своего Mac и распакуй его.</span></li>
-          <li><span>Перенеси <code>Широ.app</code> в «Программы».</span></li>
-          <li><span>Открой <code>Широ.app</code>. Когда Mac спросит про уведомления, нажми «Разрешить».</span></li>
+          <li><span>Скачай архив для своего Mac и распакуй его.</span></li>
+          <li><span>Перенеси <code>Широ.app</code> в «Программы».</span></li>
+          <li><span>Открой <code>Широ.app</code>. Когда Mac спросит про уведомления, нажми «Разрешить».</span></li>
         </ol>
-        <p class="warn">Если macOS пишет, что не может проверить файл, нажми «Готово», затем открой «Системные настройки» → «Конфиденциальность и безопасность» и внизу нажми «Всё равно открыть». Так бывает, потому что сборка подписана без платного сертификата Apple. Отключать защиту системы не нужно.</p>
+        <p class="warn">Если macOS пишет, что не может проверить файл, нажми «Готово», затем открой «Системные настройки» → «Конфиденциальность и безопасность» и внизу нажми «Всё равно открыть». Так бывает, потому что сборка подписана без платного сертификата Apple. Отключать защиту системы не нужно.</p>
         <div class="get" style="margin-top:4px">
-          <a class="dl" data-dl="mac-arm" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-AppleSilicon.zip" download><b>Mac · M1–M4</b><span>4,4 МБ</span></a>
-          <a class="dl" data-dl="mac-intel" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-Intel.zip" download><b>Mac · Intel</b><span>4,4 МБ</span></a>
+          <a class="dl" data-dl="mac-arm" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-AppleSilicon.zip" download><b>Mac · M1–M4</b><span>4,4 МБ</span></a>
+          <a class="dl" data-dl="mac-intel" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-macOS-Intel.zip" download><b>Mac · Intel</b><span>4,4 МБ</span></a>
         </div>
         <p class="dl-status" aria-live="polite"></p>
       </div>
       <div class="os">
-        <div class="head"><h2>Установка на Windows</h2><span class="count">10 и 11, 64-бит</span></div>
+        <div class="head"><h2>Установка на Windows</h2><span class="count">10 и 11, 64-бит</span></div>
         <ol class="steps">
-          <li><span>Распакуй архив в обычную папку. Из архива не запускай.</span></li>
-          <li><span>Запусти <code>Shiro.exe</code>. Ставить .NET отдельно не нужно.</span></li>
-          <li><span>Сердечко Широ появится рядом с часами. Если его не видно, оно прячется под стрелкой <kbd>^</kbd>, его можно перетащить на панель.</span></li>
+          <li><span>Распакуй архив в обычную папку. Из архива не запускай.</span></li>
+          <li><span>Запусти <code>Shiro.exe</code>. Ставить .NET отдельно не нужно.</span></li>
+          <li><span>Сердечко Широ появится рядом с часами. Если его не видно, оно прячется под стрелкой <kbd>^</kbd>, его можно перетащить на панель.</span></li>
         </ol>
-        <p class="warn">Если Windows пишет «Система Windows защитила ваш компьютер», нажми «Подробнее» → «Выполнить в любом случае». У программы нет платной подписи издателя. Версия для Windows новая и ещё не проверена на настоящем компьютере, поэтому особенно жду замечаний.</p>
+        <p class="warn">Если Windows пишет «Система Windows защитила ваш компьютер», нажми «Подробнее» → «Выполнить в любом случае». У программы нет платной подписи издателя. Версия для Windows новая и ещё не проверена на настоящем компьютере, поэтому особенно жду замечаний.</p>
         <div class="get" style="margin-top:4px">
-          <a class="dl" data-dl="win" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-Windows-x64.zip" download><b>Windows</b><span>49,6 МБ</span></a>
+          <a class="dl" data-dl="win" href="https://github.com/lilo-shire/shiro-public/releases/download/public/Shiro-Windows-x64.zip" download><b>Windows</b><span>49,6 МБ</span></a>
         </div>
         <p class="dl-status" aria-live="polite"></p>
       </div>
@@ -483,26 +495,26 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
         <div>
           <h3>Клавиши</h3>
           <ul>
-            <li><kbd>Enter</kbd> сохранить, в новой задаче ещё и открыть следующую строку</li>
-            <li><kbd>Esc</kbd> отменить ввод или закрыть окно</li>
-            <li><kbd>⌘V</kbd> <kbd>⌘C</kbd> <kbd>⌘X</kbd> <kbd>⌘A</kbd> <kbd>⌘Z</kbd> работают на любой раскладке, на Windows с <kbd>Ctrl</kbd></li>
-            <li>двойной клик переименовывает задачу или раздел</li>
+            <li><kbd>Enter</kbd> сохранить, в новой задаче ещё и открыть следующую строку</li>
+            <li><kbd>Esc</kbd> отменить ввод или закрыть окно</li>
+            <li><kbd>⌘V</kbd> <kbd>⌘C</kbd> <kbd>⌘X</kbd> <kbd>⌘A</kbd> <kbd>⌘Z</kbd> работают на любой раскладке, на Windows с <kbd>Ctrl</kbd></li>
+            <li>двойной клик переименовывает задачу или раздел</li>
           </ul>
         </div>
         <div>
           <h3>Где хранятся данные</h3>
           <ul>
-            <li>Всё остаётся на твоём компьютере и сохраняется само.</li>
-            <li>Mac: настройки macOS под именем <code>local.shiro.pomodoro</code>.</li>
+            <li>Всё остаётся на твоём компьютере и сохраняется само.</li>
+            <li>Mac: настройки macOS под именем <code>local.shiro.pomodoro</code>.</li>
             <li>Windows: <code>%LOCALAPPDATA%\Shiro\state.json</code>.</li>
           </ul>
         </div>
         <div>
-          <h3>Если что-то не так</h3>
+          <h3>Если что-то не так</h3>
           <ul>
-            <li>Пропал Широ: меню у сердечка → «Показать Широ» или запусти приложение ещё раз.</li>
-            <li>Нет звука: проверь громкость в настройках Широ и в системе.</li>
-            <li>Файл не подхватывается: задачи в нём должны быть записаны как <code>- [ ] текст</code>.</li>
+            <li>Пропал Широ: меню у сердечка → «Показать Широ» или запусти приложение ещё раз.</li>
+            <li>Нет звука: проверь громкость в настройках Широ и в системе.</li>
+            <li>Файл не подхватывается: задачи в нём должны быть записаны как <code>- [ ] текст</code>.</li>
           </ul>
         </div>
       </div>
@@ -512,8 +524,8 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
 
 <footer>
   <div class="wrap">
-    <span>Широ. Шрифты Unbounded и Onest, лицензия SIL Open Font License. Звук клавиатуры с Pixabay, автор Desastar, Pixabay Content License.</span>
-    <span>Пиши обо всём странном, неудобном или некрасивом в канал <a href="https://t.me/it_sounds_silly" target="_blank" rel="noopener noreferrer">@it_sounds_silly</a>, лучше со скриншотом.</span>
+    <span>Широ. Шрифты Unbounded и Onest, лицензия SIL Open Font License. Звук клавиатуры с Pixabay, автор Desastar, Pixabay Content License.</span>
+    <span>Пиши обо всём странном, неудобном или некрасивом в канал <a href="https://t.me/it_sounds_silly" target="_blank" rel="noopener noreferrer">@it_sounds_silly</a>, лучше со скриншотом.</span>
   </div>
 </footer>
 
@@ -531,11 +543,11 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var moodId = '0', moving = false, motionUrl = null, motionTimer = null;
   var moods = {
-    '0': ['На паузе и в перерыве Широ спокойно стоит и шевелит хвостом.', 'Широ шевелит хвостом', '20:00', 'Фокус'],
-    '7': ['На время работы — маска они. Всё, мы в фокусе.', 'Широ работает в маске они', '15:12', 'Фокус'],
-    '8': ['Закончил фокус — надел хромированные очки.', 'В очках Широ пробегает блик', '07:00', 'Перерыв'],
-    '5': ['В начале перерыва — один испуг от таракана. Потом можно отдыхать.', 'Широ пугается таракана', '07:00', 'Перерыв'],
-    '3': ['Закрыл задачу или закончил перерыв — получи взмах.', 'Широ машет рукой', '20:00', 'Фокус']
+    '0': ['На паузе и в перерыве Широ спокойно стоит и шевелит хвостом.', 'Широ шевелит хвостом', '20:00', 'Фокус'],
+    '7': ['На время работы — маска они. Всё, мы в фокусе.', 'Широ работает в маске они', '15:12', 'Фокус'],
+    '8': ['Закончил фокус — надел хромированные очки.', 'В очках Широ пробегает блик', '07:00', 'Перерыв'],
+    '5': ['В начале перерыва — один испуг от таракана. Потом можно отдыхать.', 'Широ пугается таракана', '07:00', 'Перерыв'],
+    '3': ['Закрыл задачу или закончил перерыв — получи взмах.', 'Широ машет рукой', '20:00', 'Фокус']
   };
   function stopMotion() {
     clearTimeout(motionTimer); moving = false;
@@ -606,8 +618,8 @@ footer .wrap { display: flex; flex-direction: column; gap: 6px; }
 
   // colour schemes
   var names = {
-    pastel: '<b>33</b> пастель, схема по умолчанию', nature: '<b>42</b> природа, с оливой', ice: '<b>71</b> лёд',
-    juicy: '<b>67</b> сочная', shiro: '<b>00</b> красная шапка, ниже чёрный, белый, хром и графит', mono: '<b>10</b> монохром',
+    pastel: '<b>33</b> пастель, схема по умолчанию', nature: '<b>42</b> природа, с оливой', ice: '<b>71</b> лёд',
+    juicy: '<b>67</b> сочная', shiro: '<b>00</b> красная шапка, ниже чёрный, белый, хром и графит', mono: '<b>10</b> монохром',
     night: '<b>90</b> ночь', bsod: '<b>01</b> синий экран'
   };
   var themeImg = document.getElementById('theme-img'), themeName = document.getElementById('theme-name');
