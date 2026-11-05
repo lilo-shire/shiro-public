@@ -1,0 +1,21 @@
+# Local data and tools never belong in the repository.
+.DS_Store
+.env
+.env.*
+!.env.example
+*.key
+*.p12
+*.pfx
+**/bin/
+**/obj/
+**/node_modules/
+outputs/
+backups/
+work/backups/
+work/shiro-toolchain/
+.openai/
+.codex/
+.claude/
+*.user
+*.suo
+*.log

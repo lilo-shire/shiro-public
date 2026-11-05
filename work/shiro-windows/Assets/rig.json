@@ -1,0 +1,72 @@
+{
+  "3" : {
+    "arm" : "3-arm.png",
+    "body" : "3-body.png",
+    "tailPivot" : [
+      131,
+      156
+    ],
+    "tail" : "3-tail.png",
+    "armPivot" : [
+      82,
+      134
+    ],
+    "joints" : "3-joints.png"
+  },
+  "7" : {
+    "arm" : "7-arm.png",
+    "body" : "7-body.png",
+    "tailPivot" : [
+      131,
+      155
+    ],
+    "tail" : "7-tail.png",
+    "armPivot" : [
+      76,
+      126
+    ],
+    "joints" : "7-joints.png"
+  },
+  "8" : {
+    "body" : "8-body.png",
+    "tailPivot" : [
+      131,
+      155
+    ],
+    "armPivot" : [
+      0,
+      0
+    ],
+    "tail" : "8-tail.png",
+    "joints" : "8-joints.png"
+  },
+  "0" : {
+    "body" : "0-body.png",
+    "tailPivot" : [
+      131,
+      155
+    ],
+    "armPivot" : [
+      0,
+      0
+    ],
+    "tail" : "0-tail.png",
+    "joints" : "0-joints.png"
+  },
+  "5" : {
+    "arm" : "5-arm.png",
+    "joints" : "5-joints.png",
+    "feet" : "5-feet.png",
+    "tailPivot" : [
+      131,
+      160
+    ],
+    "armPivot" : [
+      85,
+      122
+    ],
+    "body" : "5-body.png",
+    "tail" : "5-tail.png",
+    "bug" : "5-bug.png"
+  }
+}

@@ -1,0 +1,7 @@
+ambient-keyboard.caf — фоновый звук клавиатуры. Подготовлен из записи клавиатуры; исходный MP3 не включён в репозиторий
+(оригинал: «MacBook / Notebook Keyboard typing sound effect», автор Desastar, Pixabay, ID 586600:
+https://pixabay.com/ru/sound-effects/кино-и-спецэффекты-macbook-notebook-keyboard-typing-sound-effect-586600/).
+Лицензия Pixabay Content License (проверено 22.10.2026): бесплатно, без обязательного указания автора, можно изменять;
+нельзя продавать или раздавать сам звук отдельно в неизменном виде. В Широ он переделан в кольцо и встроен в приложение.
+
+glass-*, wood-*, air-* — синтезированы скриптом make-sounds.py.
