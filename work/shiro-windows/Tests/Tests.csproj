@@ -9,6 +9,8 @@
     <Compile Include="../TimerModel.cs" Link="TimerModel.cs" />
     <Compile Include="../TaskModel.cs" Link="TaskModel.cs" />
     <Compile Include="../LinkedFile.cs" Link="LinkedFile.cs" />
+    <Compile Include="../AnimationFrames.cs" Link="AnimationFrames.cs" />
+    <EmbeddedResource Include="../../shiro-ui-assets/animations/manifest.json" LogicalName="Shiro.TestAnimations" />
     <Compile Include="../AppState.cs" Link="AppState.cs" />
   </ItemGroup>
 </Project>

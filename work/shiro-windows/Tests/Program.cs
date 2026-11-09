@@ -109,20 +109,24 @@ Check(string.Join(",", moved) == "Б,В,Г,А", "file order: move to another gro
 var regrouped = LinkedFile.Ordered(parsed, moved, new Dictionary<string, string> { ["А"] = "Всплыло за день" });
 Check(regrouped[^1].Title == "А" && regrouped[^1].Section == "Всплыло за день" && regrouped[^1].RawLine == "- [ ] А", "file order: new group, same line");
 
-// Motion loops stay smooth and seamless.
-foreach (var (row, period) in new[] { (0, 4.8), (3, 9d), (5, 3.6), (7, 7.2), (8, 3.2) })
+// Playback uses the supplied clip timings, including exact loop and one-shot boundaries.
+using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Shiro.TestAnimations")!)
 {
-    var start = MotionTracks.At(row, 0); var end = MotionTracks.At(row, period);
-    Check(Math.Abs(start.Tail - end.Tail) < 1e-8 && Math.Abs(start.Arm - end.Arm) < 1e-8 && Math.Abs(start.Lean - end.Lean) < 1e-8, "motion wraps " + row);
-    var previous = start;
-    for (int i = 1; i <= period * 30; i++)
+    var animations = new AnimationFrames(stream);
+    Check(animations.Width == 192 && animations.Height == 208 && animations.Columns == 10, "animation canvas");
+    foreach (int row in new[] { 0, 3, 5, 7, 8 })
     {
-        var next = MotionTracks.At(row, i / 30d);
-        Check(Math.Abs(next.Tail - previous.Tail) < 3 && Math.Abs(next.Arm - previous.Arm) < 3, "smooth motion " + row);
-        previous = next;
+        var clip = animations.Clip(row);
+        Check(clip.Frames == (row == 0 || row == 8 ? 150 : 100) && clip.Fps == 25, "original clip timing " + row);
+        Check(clip.IndexAt(-10) == 0 && clip.IndexAt(double.NaN) == 0, "safe animation clock " + row);
+        Check(clip.IndexAt(.039) == 0 && clip.IndexAt(.04) == 1, "40ms frame boundary " + row);
+        Check(clip.IndexAt(clip.Duration - .001) == clip.Frames - 1, "last frame " + row);
+        bool loop = row == 0 || row == 7;
+        Check(clip.Loop == loop && clip.IndexAt(clip.Duration) == (loop ? 0 : clip.Frames - 1), "loop or hold " + row);
+        Check(clip.IndexAt(clip.Duration + .08) == (loop ? 2 : clip.Frames - 1), "one-shot does not restart " + row);
     }
 }
-Console.WriteLine($"PASS: {checks} Windows checks (timer, tasks, done list, links, connected file, 0.5 migration, motion)");
+Console.WriteLine($"PASS: {checks} Windows checks (timer, tasks, done list, links, connected file, 0.5 migration, supplied animations)");
 
 if (args.Length == 1)
 {
@@ -132,20 +136,19 @@ if (args.Length == 1)
     var metadata = pe.GetMetadataReader();
     var entries = metadata.ManifestResources.Select(handle => metadata.GetManifestResource(handle)).ToArray();
     var resources = entries.Select(entry => metadata.GetString(entry.Name)).ToArray();
-    Check(resources.Count(name => name.EndsWith(".png")) == 20, "all PNG layers embedded");
+    Check(resources.Count(name => name.EndsWith(".png")) == 5, "all five frame atlases embedded");
     Check(resources.Contains("Shiro.Assets.Shiro.ico"), "icon embedded");
     foreach (string font in new[] { "Onest-Variable.ttf", "Unbounded-Light.ttf", "Unbounded-Regular.ttf" }) Check(resources.Contains("Shiro.Assets." + font), "font " + font);
     foreach (string pack in new[] { "glass", "wood", "air" }) foreach (string e in new[] { "focus-end", "break-end", "task-done", "start" })
         Check(resources.Contains($"Shiro.Assets.{pack}-{e}.wav"), $"sound {pack}-{e}");
     Check(resources.Contains("Shiro.Assets.ambient-keyboard.wav"), "keyboard sound");
-    var rigEntry = entries.Single(entry => metadata.GetString(entry.Name) == "Shiro.Assets.rig.json");
+    var animationEntry = entries.Single(entry => metadata.GetString(entry.Name) == "Shiro.Assets.animations.manifest.json");
     var content = pe.GetSectionData(pe.PEHeaders.CorHeader!.ResourcesDirectory.RelativeVirtualAddress).GetContent();
-    int offset = checked((int)rigEntry.Offset);
+    int offset = checked((int)animationEntry.Offset);
     int length = BitConverter.ToInt32(content.AsSpan(offset, 4));
-    using var manifest = JsonDocument.Parse(System.Text.Encoding.UTF8.GetString(content.AsSpan(offset + 4, length)));
-    foreach (var item in manifest.RootElement.EnumerateObject())
-        foreach (string name in new[] { "body", "tail", "arm", "feet", "bug", "joints" })
-            if (item.Value.TryGetProperty(name, out var filename))
-                Check(resources.Contains("Shiro.Assets." + filename.GetString()), "embedded layer " + item.Name + "/" + name);
-    Console.WriteLine("PASS: compiled Windows assembly includes rig layers, fonts, sounds and icon");
+    using var animationStream = new MemoryStream(content.AsSpan(offset + 4, length).ToArray());
+    var animations = new AnimationFrames(animationStream);
+    foreach (int row in new[] { 0, 3, 5, 7, 8 })
+        Check(resources.Contains("Shiro.Assets.animations." + animations.Clip(row).File), "embedded clip " + row);
+    Console.WriteLine("PASS: compiled Windows assembly includes five animation atlases, manifest, fonts, sounds and icon");
 }

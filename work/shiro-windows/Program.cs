@@ -36,14 +36,15 @@ internal static class Program
     {
         using var rig = new AnimationRig();
         using var image = new Bitmap(192, 208, PixelFormat.Format32bppPArgb);
-        foreach (int row in new[] { 0, 3, 5, 7, 8 }) for (int frame = 0; frame < 108; frame++)
+        int count = 0;
+        foreach (int row in new[] { 0, 3, 5, 7, 8 }) for (int frame = 0; frame < AnimationRig.Timing.Clip(row).Frames; frame++)
         {
             using var g = Graphics.FromImage(image); g.Clear(Color.Transparent);
-            rig.Draw(g, row, frame / 30d, new(0, 0, 192, 208));
+            rig.Draw(g, row, frame / AnimationRig.Timing.Clip(row).Fps, new(0, 0, 192, 208)); count++;
             for (int x = 0; x < 192; x++) if (image.GetPixel(x, 0).A != 0 || image.GetPixel(x, 207).A != 0) throw new InvalidOperationException("Vertical clipping: " + row);
             for (int y = 0; y < 208; y++) if (image.GetPixel(0, y).A != 0 || image.GetPixel(191, y).A != 0) throw new InvalidOperationException("Horizontal clipping: " + row);
         }
-        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "animation-check.txt"), "PASS: 540 frames; no edge clipping; cached native layers.");
+        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "animation-check.txt"), $"PASS: {count} supplied frames; no edge clipping.");
     }
 }
 
@@ -182,7 +183,11 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
     void StopFocusIfRunning() { if (Timer.State.Running && Timer.State.Phase == "work") { CreditCurrentFocus(); Timer.Pause(Now); } }
     // Only one current task at a time: choosing a file task clears the Shiro selection and the other way round.
     void KeepFileSelection() { if (state.ActiveFileTask != null) { Store.ActiveTaskId = null; Store.FocusAnchorRemaining = -1; } }
-    void SetReaction(int next, double duration) { reactionRow = next; reactionUntil = Now + duration; }
+    void SetReaction(int next)
+    {
+        reactionRow = next; reactionUntil = Now + AnimationRig.Timing.Clip(next).Duration;
+        if (row == next) motion.Restart();
+    }
     internal string? ActiveTaskTitle => state.ActiveFileTask ?? Store.Task(Store.ActiveTaskId)?.Title;
 
     void Tick()
@@ -211,7 +216,7 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
     void IntervalFinished(string transition)
     {
         bool focus = transition == "workFinished";
-        if (focus) SetReaction(8, 3.2); else SetReaction(3, 2.2);
+        if (focus) SetReaction(8); else SetReaction(3);
         audio.Play(state.SoundPack + (focus ? "-focus-end" : "-break-end"), state.Volume);
         if (state.Notify) tray.ShowBalloonTip(6000, L.T(focus ? "focusDone" : "breakDone"), L.T(focus ? "focusDoneBody" : "breakDoneBody"), ToolTipIcon.None);
         PlayMarquee();
@@ -221,7 +226,7 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
     void ChooseAnimation()
     {
         int desired = DesiredRow();
-        int interval = desired == 0 && !MarqueeRunning ? 67 : 33;
+        int interval = (int)Math.Round(1000 / (MarqueeRunning ? Math.Max(30, AnimationRig.Timing.Clip(desired).Fps) : AnimationRig.Timing.Clip(desired).Fps));
         // Only a new row restarts the motion; a frame-rate change for the ticker keeps it running smoothly.
         if (desired != row) { row = desired; motion.Restart(); }
         if (animation.Interval != interval) animation.Interval = interval;
@@ -292,7 +297,7 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
             Timer.Start(Now);
             if (focus && CreditsTasks) Store.BeginFocus(Timer.RemainingAt(Now));
             // A break opens with the one-off cockroach scare, then calm rest.
-            if (focus) reactionUntil = 0; else SetReaction(5, 3.6);
+            if (focus) reactionUntil = 0; else SetReaction(5);
             audio.Play(state.SoundPack + "-start", state.Volume * .45);
         }
         PlayMarquee(); Save(); Tick();
@@ -325,7 +330,7 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
         if (Store.ActiveTaskId == id) { StopFocusIfRunning(); StashSelectedTaskTime(); }
         string? before = Store.ActiveTaskId;
         bool done = Store.Toggle(id);
-        if (done) { SetReaction(3, 1.8); audio.Play(state.SoundPack + "-task-done", state.Volume * .8); }
+        if (done) { SetReaction(3); audio.Play(state.SoundPack + "-task-done", state.Volume * .8); }
         KeepFileSelection();
         if (before != Store.ActiveTaskId) LoadSelectedTaskTime();
         AfterTaskChange();
@@ -442,7 +447,7 @@ internal sealed class ShiroContext : ApplicationContext, IPanelHost, ISettingsHo
         if (state.LinkedFile == null || index < 0 || index >= fileTasks.Count) return;
         var task = fileTasks[index];
         string? text = ReadFile(), next = text != null ? LinkedFile.SetDone(text, task, !task.Done) : null;
-        if (next != null) { WriteFile(next); if (!task.Done) { SetReaction(3, 1.8); audio.Play(state.SoundPack + "-task-done", state.Volume * .8); } }
+        if (next != null) { WriteFile(next); if (!task.Done) { SetReaction(3); audio.Play(state.SoundPack + "-task-done", state.Volume * .8); } }
         ReloadFile(); panel.Reload(); Tick();
     }
     public void SelectFileTask(int index)

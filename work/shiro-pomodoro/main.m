@@ -258,10 +258,8 @@ static NSImage *ShiroMenuBarIcon(void) {
     self.petWindow.releasedWhenClosed = NO;
     self.pet = [[PetView alloc] initWithFrame:NSMakeRect(0, 0, 192, 212)];
     self.pet.owner = self;
-    NSImage *atlas = [[NSImage alloc] initWithContentsOfFile:[NSBundle.mainBundle pathForResource:@"spritesheet" ofType:@"png"]];
-    if (!atlas) { NSLog(@"Cannot load sprite atlas"); [NSApp terminate:nil]; return; }
-    atlas.size = NSMakeSize(1536, 2288);
-    self.pet.rig = [[ShiroRig alloc] initWithAtlas:atlas];
+    self.pet.rig = [[ShiroRig alloc] initWithDirectory:[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"animations"]];
+    if (!self.pet.rig) { NSLog(@"Cannot load Shiro animations"); [NSApp terminate:nil]; return; }
     self.petWindow.contentView = self.pet;
     NSRect area = NSScreen.mainScreen.visibleFrame;
     CGFloat x = [defaults objectForKey:@"petX"] ? [defaults doubleForKey:@"petX"] : NSMaxX(area) - 218;
@@ -401,7 +399,12 @@ static NSImage *ShiroMenuBarIcon(void) {
 - (void)stopFocusIfRunning {
     if (self.timer.running && [self.timer.phase isEqual:@"work"]) { [self creditCurrentFocus]; [self.timer pauseAt:Now()]; }
 }
-- (void)setReactionRow:(NSInteger)row duration:(double)duration { self.reactionRow = row; self.reactionUntil = Now() + duration; }
+- (void)playReactionRow:(NSInteger)row {
+    self.reactionRow = row;
+    double duration = self.pet.rig ? [self.pet.rig durationForRow:row] : (row == 8 ? 6 : 4);
+    self.reactionUntil = Now() + duration;
+    if (self.pet.row == row) self.motionStartedAt = CACurrentMediaTime();
+}
 
 - (void)tick:(NSTimer *)timer {
     // The daily file is replaced every morning: check its path every two seconds and re-read on any change.
@@ -439,7 +442,7 @@ static NSImage *ShiroMenuBarIcon(void) {
 }
 - (void)intervalFinished:(NSString *)event {
     BOOL focus = [event isEqual:@"workFinished"];
-    if (focus) [self setReactionRow:8 duration:3.2]; else [self setReactionRow:3 duration:2.2];
+    if (focus) [self playReactionRow:8]; else [self playReactionRow:3];
     [self playSound:focus ? @"focus-end" : @"break-end" gain:1];
     [self postNotificationTitle:ShiroL(focus ? @"focusDone" : @"breakDone") body:ShiroL(focus ? @"focusDoneBody" : @"breakDoneBody")];
     [self playMarquee];
@@ -452,7 +455,8 @@ static NSImage *ShiroMenuBarIcon(void) {
 }
 - (void)chooseAnimation {
     NSInteger row = [self desiredRow];
-    NSTimeInterval interval = row == 0 && !self.marqueeNeeded ? 1.0 / 15 : 1.0 / 30;
+    double fps = self.pet.rig ? [self.pet.rig framesPerSecondForRow:row] : 25;
+    NSTimeInterval interval = 1.0 / (self.marqueeNeeded ? fmax(30, fps) : fps);
     if (self.animation && self.pet.row == row && interval == self.animationInterval) return;
     BOOL sameRow = self.animation && self.pet.row == row;
     [self.animation invalidate]; self.animation = nil;
@@ -496,7 +500,7 @@ static const CGFloat kMarqueeGap = 36, kMarqueeSpeed = 34, kMarqueePause = 0.6;
         [self.timer startAt:Now()];
         if (focus && [self creditsTasks]) [self.taskStore beginFocusAtRemaining:[self.timer remainingAt:Now()]];
         // A break opens with the one-off cockroach scare, then calm rest.
-        if (focus) self.reactionUntil = 0; else [self setReactionRow:5 duration:3.6];
+        if (focus) self.reactionUntil = 0; else [self playReactionRow:5];
         [self playSound:@"start" gain:.45];
     }
     [self playMarquee];
@@ -535,7 +539,7 @@ static const CGFloat kMarqueeGap = 36, kMarqueeSpeed = 34, kMarqueePause = 0.6;
     if (selected) { [self stopFocusIfRunning]; [self stashSelectedTaskTime]; }
     NSString *before = self.taskStore.activeTaskID;
     BOOL done = [self.taskStore toggleTaskID:taskID];
-    if (done) { [self setReactionRow:3 duration:1.8]; [self playSound:@"task-done" gain:.8]; }
+    if (done) { [self playReactionRow:3]; [self playSound:@"task-done" gain:.8]; }
     [self keepFileSelection];
     if (![before isEqual:self.taskStore.activeTaskID]) [self loadSelectedTaskTime];
     [self afterTaskChange];
@@ -721,7 +725,7 @@ static const CGFloat kMarqueeGap = 36, kMarqueeSpeed = 34, kMarqueePause = 0.6;
     if (next) {
         NSError *error = nil;
         if (![next writeToFile:self.linkedPath atomically:YES encoding:NSUTF8StringEncoding error:&error]) NSLog(@"Cannot write %@: %@", self.linkedPath, error);
-        else if (!task.done) { [self setReactionRow:3 duration:1.8]; [self playSound:@"task-done" gain:.8]; }
+        else if (!task.done) { [self playReactionRow:3]; [self playSound:@"task-done" gain:.8]; }
     }
     [self reloadLinkedFile]; [self refreshPanel]; [self tick:nil];
 }
@@ -1119,9 +1123,8 @@ int main(int argc, const char *argv[]) {
             if (row == 5) delegate.timer.deadline = Now() + 246;
             PetView *pet = [[PetView alloc] initWithFrame:NSMakeRect(0, 0, 192, 212)];
             pet.owner = delegate; pet.row = row;
-            NSImage *atlas = [[NSImage alloc] initWithContentsOfFile:[NSBundle.mainBundle pathForResource:@"spritesheet" ofType:@"png"]];
-            if (!atlas) { NSLog(@"Missing atlas; bundle: %@", NSBundle.mainBundle.bundlePath); return 3; }
-            atlas.size = NSMakeSize(1536, 2288); pet.rig = [[ShiroRig alloc] initWithAtlas:atlas];
+            pet.rig = [[ShiroRig alloc] initWithDirectory:[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"animations"]];
+            if (!pet.rig) return 4;
             pet.manualTime = argc == 5 ? atof(argv[4]) : 0;
             NSString *petScale = NSProcessInfo.processInfo.environment[@"SHIRO_RENDER_SCALE"];
             return RenderView(pet, delegate.renderPath, petScale.length ? petScale.doubleValue : 1);

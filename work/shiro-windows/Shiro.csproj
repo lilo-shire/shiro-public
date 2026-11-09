@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Shiro</AssemblyName>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <Product>Широ · помодоро</Product>
     <ApplicationIcon>Assets/Shiro.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -19,7 +19,8 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets/*.png;Assets/rig.json;Assets/Shiro.ico;Assets/*.ttf;Assets/*.wav" />
+    <EmbeddedResource Include="Assets/Shiro.ico;Assets/*.ttf;Assets/*.wav" />
+    <EmbeddedResource Include="../shiro-ui-assets/animations/*.png;../shiro-ui-assets/animations/manifest.json" LogicalName="Shiro.Assets.animations.%(Filename)%(Extension)" />
     <Compile Remove="Tests/**/*.cs" />
   </ItemGroup>
 </Project>

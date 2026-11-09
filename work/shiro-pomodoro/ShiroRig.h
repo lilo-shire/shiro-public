@@ -1,8 +1,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface ShiroRig : NSObject
-- (instancetype)initWithAtlas:(NSImage *)atlas;
+- (instancetype)initWithDirectory:(NSString *)directory;
 - (void)drawRow:(NSInteger)row time:(double)time inRect:(NSRect)rect;
-+ (NSDictionary *)tracksForRow:(NSInteger)row time:(double)time;
-- (BOOL)exportLayersToDirectory:(NSString *)directory error:(NSError **)error;
+- (NSInteger)frameIndexForRow:(NSInteger)row time:(double)time;
+- (double)durationForRow:(NSInteger)row;
+- (double)framesPerSecondForRow:(NSInteger)row;
+- (NSInteger)frameCountForRow:(NSInteger)row;
 @end

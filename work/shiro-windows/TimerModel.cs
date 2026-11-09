@@ -97,24 +97,3 @@ public sealed class TimerModel
     }
 }
 
-public readonly record struct MotionTracks(double Tail, double Arm, double Lean, double Bug)
-{
-    public static MotionTracks At(int row, double seconds)
-    {
-        double t = Math.Max(0, seconds);
-        double Sin(double period) => Math.Sin(t * 2 * Math.PI / period);
-        return row switch
-        {
-            7 => new(9 * Sin(3.6), 9 * Sin(2.4), 0, 0),
-            3 => new(7 * Sin(3), 12 * Sin(.9), 0, 0),
-            8 => new(6 * Sin(3.2), 0, 0, 0),
-            5 => Fear(t),
-            _ => new(7 * Sin(4.8), 0, 0, 0)
-        };
-    }
-    static MotionTracks Fear(double t)
-    {
-        double cycle = t * 2 * Math.PI / 3.6, alarm = (1 - Math.Cos(cycle)) / 2;
-        return new(-10 * Math.Sin(cycle), 12 * alarm, 3 * alarm, 7 * alarm);
-    }
-}

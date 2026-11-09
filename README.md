@@ -4,7 +4,7 @@
 
 Кошкомальчик на рабочем столе для macOS и Windows: выбираешь задачу, запускаешь фокус и иногда смотришь на глупи анимации.
 
-[Скачать приложение](https://github.com/lilo-shire/shiro-public/releases/tag/public) · [Лендинг](https://lilo-shire.github.io/shiro-public/) · [Как пользоваться](Инструкция.md) · [Telegram](https://t.me/it_sounds_silly)
+[Скачать приложение](https://github.com/lilo-shire/shiro-public/releases/latest) · [Лендинг](https://lilo-shire.github.io/shiro-public/) · [Как пользоваться](Инструкция.md) · [Telegram](https://t.me/it_sounds_silly)
 
 ## Что умеет
 
@@ -18,7 +18,7 @@
 
 ## Установка
 
-В [Releases](https://github.com/lilo-shire/shiro-public/releases/tag/public) лежат три архива. Для Mac выбери Apple Silicon или Intel, распакуй и перенеси «Широ.app» в «Программы». На Windows распакуй папку и запусти Shiro.exe; отдельная установка .NET не нужна.
+В [Releases](https://github.com/lilo-shire/shiro-public/releases/latest) лежат три архива. Для Mac выбери Apple Silicon или Intel, распакуй и перенеси «Широ.app» в «Программы». На Windows распакуй папку и запусти Shiro.exe; отдельная установка .NET не нужна.
 
 Сборки без платной подписи издателя, поэтому система может показать предупреждение. Подробности — в [инструкции](Инструкция.md).
 
@@ -28,7 +28,7 @@ Windows-версию пока нужно проверить на настоящ�
 
 - `work/shiro-pomodoro/` — приложение для Mac, Objective-C / AppKit.
 - `work/shiro-windows/` — приложение для Windows, C# / Windows Forms.
-- `work/shiro-ui-assets/` — шрифты и звуки.
+- `work/shiro-ui-assets/` — шрифты, звуки и новые прозрачные анимации (`animations/`).
 - `assets/` — персонаж и иконка приложения.
 - `docs/` — лендинг для GitHub Pages со скринами и анимациями.
 
